@@ -211,7 +211,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
             // Action Buttons
             if (widget.task.status == 'pending') ...[
               CustomButton(
-                text: 'เริ่มทำภารกิจ',
+                text: '🚀 เริ่มทำภารกิจ',
                 onPressed: _isLoading ? null : () => _updateTaskStatus('in_progress'),
                 isLoading: _isLoading,
                 backgroundColor: Colors.blue[600],
@@ -221,14 +221,14 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
             
             if (widget.task.status == 'in_progress') ...[
               CustomButton(
-                text: 'เสร็จสิ้นภารกิจ',
+                text: '✅ เสร็จสิ้นภารกิจ',
                 onPressed: _isLoading ? null : () => _updateTaskStatus('completed'),
                 isLoading: _isLoading,
                 backgroundColor: Colors.green[600],
               ),
               SizedBox(height: 12),
               CustomButton(
-                text: 'หยุดทำชั่วคราว',
+                text: '⏸️ หยุดทำชั่วคราว',
                 onPressed: _isLoading ? null : () => _updateTaskStatus('pending'),
                 backgroundColor: Colors.orange[600],
               ),
@@ -237,27 +237,66 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
             if (widget.task.status == 'completed') ...[
               Container(
                 width: double.infinity,
-                padding: EdgeInsets.all(16),
+                padding: EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.green[50],
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.green[200]!),
-                ),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.check_circle,
-                      color: Colors.green[600],
-                      size: 24,
+                  gradient: LinearGradient(
+                    colors: [Color(0xFF4CAF50), Color(0xFF45A049)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.green.withOpacity(0.3),
+                      blurRadius: 10,
+                      offset: Offset(0, 5),
                     ),
-                    SizedBox(width: 12),
-                    Expanded(
-                      child: Text(
-                        'ยินดีด้วย! คุณทำภารกิจนี้เสร็จแล้วและได้รับ ${widget.task.points} คะแนน',
-                        style: TextStyle(
-                          color: Colors.green[800],
-                          fontWeight: FontWeight.bold,
-                        ),
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    Text(
+                      '🎉🎊🎉',
+                      style: TextStyle(fontSize: 40),
+                    ),
+                    SizedBox(height: 12),
+                    Text(
+                      'ยินดีด้วย! 🏆',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 22,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      'คุณทำภารกิจนี้เสร็จแล้ว!',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
+                    ),
+                    SizedBox(height: 12),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.3),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text('⭐', style: TextStyle(fontSize: 20)),
+                          SizedBox(width: 8),
+                          Text(
+                            'ได้รับ ${widget.task.points} คะแนน',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -268,27 +307,37 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
             if (widget.task.isOverdue && widget.task.status != 'completed') ...[
               Container(
                 width: double.infinity,
-                padding: EdgeInsets.all(16),
+                padding: EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   color: Colors.red[50],
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.red[200]!),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: Colors.red[300]!, width: 2),
                 ),
                 child: Row(
                   children: [
-                    Icon(
-                      Icons.warning,
-                      color: Colors.red[600],
-                      size: 24,
-                    ),
+                    Text('⚠️', style: TextStyle(fontSize: 40)),
                     SizedBox(width: 12),
                     Expanded(
-                      child: Text(
-                        'ภารกิจนี้เกินกำหนดแล้ว กรุณาทำให้เสร็จโดยเร็ว',
-                        style: TextStyle(
-                          color: Colors.red[800],
-                          fontWeight: FontWeight.bold,
-                        ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'ภารกิจนี้เกินกำหนดแล้ว!',
+                            style: TextStyle(
+                              color: Colors.red[800],
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                          SizedBox(height: 4),
+                          Text(
+                            'กรุณาทำให้เสร็จโดยเร็ว',
+                            style: TextStyle(
+                              color: Colors.red[700],
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],

@@ -1,0 +1,66 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper function to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Helper function to check if user is owner
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    // Users collection
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && request.auth.uid == userId;
+      allow update: if isOwner(userId);
+      allow delete: if isOwner(userId);
+    }
+    
+    // Tasks collection
+    match /tasks/{taskId} {
+      allow read: if isAuthenticated() && 
+        (request.auth.uid == resource.data.parentId || 
+         request.auth.uid == resource.data.childId);
+      allow create: if isAuthenticated() && 
+        request.auth.uid == request.resource.data.parentId;
+      allow update: if isAuthenticated() && 
+        (request.auth.uid == resource.data.parentId || 
+         request.auth.uid == resource.data.childId);
+      allow delete: if isAuthenticated() && 
+        request.auth.uid == resource.data.parentId;
+    }
+    
+    // Rewards collection
+    match /rewards/{rewardId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && 
+        request.auth.uid == request.resource.data.parentId;
+      allow update, delete: if isAuthenticated() && 
+        request.auth.uid == resource.data.parentId;
+    }
+    
+    // Families collection (parent's children)
+    match /families/{parentId}/children/{childId} {
+      allow read, write: if isAuthenticated() && 
+        request.auth.uid == parentId;
+    }
+    
+    // Reward redemptions
+    match /reward_redemptions/{redemptionId} {
+      allow read: if isAuthenticated() && 
+        (request.auth.uid == resource.data.parentId || 
+         request.auth.uid == resource.data.childId);
+      allow create: if isAuthenticated() && 
+        request.auth.uid == request.resource.data.childId;
+      allow update: if isAuthenticated() && 
+        (request.auth.uid == resource.data.parentId || 
+         request.auth.uid == resource.data.childId);
+      allow delete: if isAuthenticated() && 
+        request.auth.uid == resource.data.parentId;
+    }
+  }
+}
+

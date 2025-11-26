@@ -99,40 +99,65 @@ class _RewardsScreenState extends State<RewardsScreen> {
   Widget build(BuildContext context) {
     bool canRedeem = _kidPoints >= widget.reward.pointsRequired;
 
+    String rewardEmoji = _getRewardCategoryEmoji(widget.reward.category);
+    
     return Scaffold(
       appBar: AppBar(
-        title: Text('แลกรางวัล'),
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('🎁 ', style: TextStyle(fontSize: 24)),
+            Text('แลกรางวัล'),
+          ],
+        ),
         backgroundColor: Colors.pink[800],
         foregroundColor: Colors.white,
+        elevation: 0,
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Reward Header Card
+            // Reward Header Card - Enhanced
             Card(
-              elevation: 4,
+              elevation: 6,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(20),
               ),
-              child: Padding(
-                padding: EdgeInsets.all(20),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  gradient: canRedeem
+                      ? LinearGradient(
+                          colors: [Colors.pink[400]!, Colors.purple[400]!],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        )
+                      : null,
+                  color: canRedeem ? null : Colors.grey[200],
+                ),
+                padding: EdgeInsets.all(24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: [
-                        CircleAvatar(
-                          backgroundColor: canRedeem ? Colors.pink : Colors.grey,
-                          radius: 30,
-                          child: Icon(
-                            Icons.card_giftcard,
-                            color: Colors.white,
-                            size: 32,
+                        Container(
+                          width: 70,
+                          height: 70,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.3),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Center(
+                            child: Text(
+                              rewardEmoji,
+                              style: TextStyle(fontSize: 40),
+                            ),
                           ),
                         ),
-                        SizedBox(width: 16),
+                        SizedBox(width: 20),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,16 +165,25 @@ class _RewardsScreenState extends State<RewardsScreen> {
                               Text(
                                 widget.reward.title,
                                 style: TextStyle(
-                                  fontSize: 24,
+                                  fontSize: 26,
                                   fontWeight: FontWeight.bold,
+                                  color: canRedeem ? Colors.white : Colors.grey[800],
                                 ),
                               ),
-                              SizedBox(height: 4),
-                              Text(
-                                widget.reward.categoryDisplayText,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.grey[600],
+                              SizedBox(height: 6),
+                              Container(
+                                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.3),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Text(
+                                  widget.reward.categoryDisplayText,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: canRedeem ? Colors.white : Colors.grey[600],
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ),
                             ],
@@ -162,7 +196,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
                       widget.reward.description,
                       style: TextStyle(
                         fontSize: 16,
-                        color: Colors.grey[700],
+                        color: canRedeem ? Colors.white70 : Colors.grey[700],
                       ),
                     ),
                   ],
@@ -182,12 +216,18 @@ class _RewardsScreenState extends State<RewardsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'ข้อมูลคะแนน',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    Row(
+                      children: [
+                        Text('💰 ', style: TextStyle(fontSize: 20)),
+                        Text(
+                          'ข้อมูลคะแนน',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.pink[800],
+                          ),
+                        ),
+                      ],
                     ),
                     SizedBox(height: 16),
                     Row(
@@ -215,26 +255,33 @@ class _RewardsScreenState extends State<RewardsScreen> {
                     if (canRedeem) ...[
                       Container(
                         width: double.infinity,
-                        padding: EdgeInsets.all(16),
+                        padding: EdgeInsets.all(20),
                         decoration: BoxDecoration(
-                          color: Colors.green[50],
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: Colors.green[200]!),
+                          gradient: LinearGradient(
+                            colors: [Color(0xFF4CAF50), Color(0xFF45A049)],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.green.withOpacity(0.3),
+                              blurRadius: 10,
+                              offset: Offset(0, 5),
+                            ),
+                          ],
                         ),
                         child: Row(
                           children: [
-                            Icon(
-                              Icons.check_circle,
-                              color: Colors.green[600],
-                              size: 24,
-                            ),
+                            Text('✅', style: TextStyle(fontSize: 32)),
                             SizedBox(width: 12),
                             Expanded(
                               child: Text(
-                                'คุณสามารถแลกรางวัลนี้ได้!',
+                                'คุณสามารถแลกรางวัลนี้ได้! 🎉',
                                 style: TextStyle(
-                                  color: Colors.green[800],
+                                  color: Colors.white,
                                   fontWeight: FontWeight.bold,
+                                  fontSize: 16,
                                 ),
                               ),
                             ),
@@ -244,27 +291,37 @@ class _RewardsScreenState extends State<RewardsScreen> {
                     ] else ...[
                       Container(
                         width: double.infinity,
-                        padding: EdgeInsets.all(16),
+                        padding: EdgeInsets.all(20),
                         decoration: BoxDecoration(
                           color: Colors.red[50],
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: Colors.red[200]!),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: Colors.red[300]!, width: 2),
                         ),
                         child: Row(
                           children: [
-                            Icon(
-                              Icons.warning,
-                              color: Colors.red[600],
-                              size: 24,
-                            ),
+                            Text('⚠️', style: TextStyle(fontSize: 32)),
                             SizedBox(width: 12),
                             Expanded(
-                              child: Text(
-                                'คะแนนไม่เพียงพอ คุณต้องมี ${widget.reward.pointsRequired - _kidPoints} คะแนนเพิ่มเติม',
-                                style: TextStyle(
-                                  color: Colors.red[800],
-                                  fontWeight: FontWeight.bold,
-                                ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'คะแนนไม่เพียงพอ',
+                                    style: TextStyle(
+                                      color: Colors.red[800],
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  SizedBox(height: 4),
+                                  Text(
+                                    'คุณต้องมี ${widget.reward.pointsRequired - _kidPoints} คะแนนเพิ่มเติม',
+                                    style: TextStyle(
+                                      color: Colors.red[700],
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
@@ -280,20 +337,20 @@ class _RewardsScreenState extends State<RewardsScreen> {
             // Action Buttons
             if (canRedeem) ...[
               CustomButton(
-                text: 'แลกรางวัล',
+                text: '🎁 แลกรางวัล',
                 onPressed: _isLoading ? null : _redeemReward,
                 isLoading: _isLoading,
                 backgroundColor: Colors.pink[600],
               ),
               SizedBox(height: 12),
               CustomButton(
-                text: 'ยกเลิก',
+                text: '❌ ยกเลิก',
                 onPressed: () => Navigator.pop(context),
                 backgroundColor: Colors.grey[600],
               ),
             ] else ...[
               CustomButton(
-                text: 'กลับ',
+                text: '🔙 กลับ',
                 onPressed: () => Navigator.pop(context),
                 backgroundColor: Colors.grey[600],
               ),
@@ -305,34 +362,34 @@ class _RewardsScreenState extends State<RewardsScreen> {
   }
 
   Widget _buildPointsCard(String title, String value, Color color, IconData icon) {
+    String emoji = title.contains('ของคุณ') ? '⭐' : '🎁';
     return Container(
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.3)),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: color.withOpacity(0.3), width: 2),
       ),
       child: Column(
         children: [
-          Icon(
-            icon,
-            color: color,
-            size: 32,
-          ),
+          Text(emoji, style: TextStyle(fontSize: 36)),
           SizedBox(height: 8),
           Text(
             value,
             style: TextStyle(
-              fontSize: 24,
+              fontSize: 28,
               fontWeight: FontWeight.bold,
               color: color,
+              letterSpacing: 1,
             ),
           ),
+          SizedBox(height: 4),
           Text(
             title,
             style: TextStyle(
               fontSize: 12,
-              color: Colors.grey[600],
+              color: Colors.grey[700],
+              fontWeight: FontWeight.w500,
             ),
             textAlign: TextAlign.center,
           ),
@@ -340,5 +397,23 @@ class _RewardsScreenState extends State<RewardsScreen> {
       ),
     );
   }
+
+  String _getRewardCategoryEmoji(String category) {
+    switch (category) {
+      case 'toy':
+        return '🧸';
+      case 'book':
+        return '📖';
+      case 'activity':
+        return '🎪';
+      case 'privilege':
+        return '👑';
+      case 'other':
+        return '🎁';
+      default:
+        return '🎁';
+    }
+  }
 }
+
 

@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuestForKids - App Preview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Kanit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .phone-container {
+            width: 375px;
+            height: 812px;
+            background: #000;
+            border-radius: 40px;
+            padding: 8px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            border-radius: 32px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* AppBar - Child */
+        .appbar {
+            background: linear-gradient(135deg, #8B5CF6, #7C3AED);
+            color: white;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .appbar-title {
+            font-size: 20px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .points-badge {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            padding: 6px 14px;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(255,215,0,0.4);
+        }
+
+        /* Content */
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            background: #f5f5f5;
+        }
+
+        /* Welcome Card */
+        .welcome-card {
+            background: linear-gradient(135deg, #8B5CF6, #7C3AED);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 20px;
+            color: white;
+            box-shadow: 0 4px 12px rgba(139,92,246,0.3);
+        }
+
+        .welcome-card h2 {
+            font-size: 26px;
+            margin-bottom: 8px;
+        }
+
+        .welcome-card p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        /* Points Card */
+        .points-card {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 20px;
+            color: white;
+            box-shadow: 0 4px 12px rgba(255,215,0,0.3);
+        }
+
+        .points-card-content {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .points-emoji {
+            font-size: 48px;
+            background: rgba(255,255,255,0.3);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .points-info h3 {
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+
+        .points-info .points-value {
+            font-size: 36px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        /* Stat Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 2px solid;
+        }
+
+        .stat-card.pending {
+            border-color: rgba(255,152,0,0.3);
+            background: rgba(255,152,0,0.1);
+        }
+
+        .stat-card.completed {
+            border-color: rgba(76,175,80,0.3);
+            background: rgba(76,175,80,0.1);
+        }
+
+        .stat-card.available {
+            border-color: rgba(236,72,153,0.3);
+            background: rgba(236,72,153,0.1);
+        }
+
+        .stat-card.redeemed {
+            border-color: rgba(33,150,243,0.3);
+            background: rgba(33,150,243,0.1);
+        }
+
+        .stat-emoji {
+            font-size: 36px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        /* Action Buttons */
+        .actions-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #8B5CF6;
+            margin-bottom: 16px;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .action-button {
+            background: linear-gradient(135deg, #8B5CF6, #7C3AED);
+            border-radius: 16px;
+            padding: 20px 16px;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(139,92,246,0.3);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .action-button:hover {
+            transform: scale(1.05);
+        }
+
+        .action-button.pink {
+            background: linear-gradient(135deg, #EC4899, #DB2777);
+        }
+
+        .action-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        /* Task Card */
+        .task-card {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 2px solid rgba(139,92,246,0.3);
+        }
+
+        .task-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .task-emoji {
+            width: 60px;
+            height: 60px;
+            background: rgba(139,92,246,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            flex-shrink: 0;
+        }
+
+        .task-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .task-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .task-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            flex: 1;
+        }
+
+        .task-status-badge {
+            background: #FF9800;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .task-status-badge.completed {
+            background: #4CAF50;
+        }
+
+        .task-status-badge.in-progress {
+            background: #2196F3;
+        }
+
+        .task-description {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .task-meta {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .task-badge {
+            background: rgba(255,193,7,0.2);
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #F57C00;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+        }
+
+        .nav-item {
+            text-align: center;
+            color: #999;
+            font-size: 11px;
+            cursor: pointer;
+        }
+
+        .nav-item.active {
+            color: #8B5CF6;
+            font-weight: bold;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: none;
+        }
+
+        .tabs.active {
+            display: block;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-emoji {
+            font-size: 80px;
+            margin-bottom: 16px;
+        }
+
+        .empty-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .empty-subtitle {
+            font-size: 14px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-container">
+        <div class="phone-screen">
+            <!-- AppBar -->
+            <div class="appbar">
+                <div class="appbar-title">
+                    <span>🎮</span>
+                    <span>QuestForKids</span>
+                </div>
+                <div class="points-badge">
+                    <span>⭐</span>
+                    <span>150</span>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="content">
+                <!-- Dashboard Tab -->
+                <div class="tabs active" id="dashboard">
+                    <!-- Welcome Card -->
+                    <div class="welcome-card">
+                        <h2>👋 สวัสดี เด็กๆ!</h2>
+                        <p>🎯 พร้อมรับภารกิจใหม่แล้วหรือยัง?</p>
+                    </div>
+
+                    <!-- Points Card -->
+                    <div class="points-card">
+                        <div class="points-card-content">
+                            <div class="points-emoji">⭐</div>
+                            <div class="points-info">
+                                <h3>💰 คะแนนของฉัน</h3>
+                                <div class="points-value">150 คะแนน</div>
+                            </div>
+                            <div style="font-size: 24px;">🏆</div>
+                        </div>
+                    </div>
+
+                    <!-- Stats Grid -->
+                    <div class="stats-grid">
+                        <div class="stat-card pending">
+                            <div class="stat-emoji">⏰</div>
+                            <div class="stat-value" style="color: #FF9800;">3</div>
+                            <div class="stat-label">ภารกิจรอทำ</div>
+                        </div>
+                        <div class="stat-card completed">
+                            <div class="stat-emoji">✅</div>
+                            <div class="stat-value" style="color: #4CAF50;">12</div>
+                            <div class="stat-label">ภารกิจเสร็จแล้ว</div>
+                        </div>
+                        <div class="stat-card available">
+                            <div class="stat-emoji">🎁</div>
+                            <div class="stat-value" style="color: #EC4899;">5</div>
+                            <div class="stat-label">รางวัลที่แลกได้</div>
+                        </div>
+                        <div class="stat-card redeemed">
+                            <div class="stat-emoji">🎉</div>
+                            <div class="stat-value" style="color: #2196F3;">2</div>
+                            <div class="stat-label">รางวัลที่แลกแล้ว</div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="actions-title">🚀 การดำเนินการด่วน</div>
+                    <div class="action-buttons">
+                        <div class="action-button">
+                            <div class="action-icon">📋</div>
+                            <div>ดูภารกิจ</div>
+                        </div>
+                        <div class="action-button pink">
+                            <div class="action-icon">🎁</div>
+                            <div>แลกรางวัล</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tasks Tab -->
+                <div class="tabs" id="tasks">
+                    <div class="task-card">
+                        <div class="task-header">
+                            <div class="task-emoji">🧹</div>
+                            <div class="task-info">
+                                <div class="task-title-row">
+                                    <div class="task-title">ทำความสะอาดห้องนอน</div>
+                                    <div class="task-status-badge">รอดำเนินการ</div>
+                                </div>
+                                <div class="task-description">เก็บที่นอนและจัดของให้เรียบร้อย</div>
+                                <div class="task-meta">
+                                    <span class="task-badge">⭐ 10 คะแนน</span>
+                                    <span class="task-badge">📅 15/12/2024</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="task-card">
+                        <div class="task-header">
+                            <div class="task-emoji">📚</div>
+                            <div class="task-info">
+                                <div class="task-title-row">
+                                    <div class="task-title">อ่านหนังสือ 30 นาที</div>
+                                    <div class="task-status-badge in-progress">กำลังทำ</div>
+                                </div>
+                                <div class="task-description">อ่านหนังสือเรียนหรือหนังสือทั่วไป</div>
+                                <div class="task-meta">
+                                    <span class="task-badge">⭐ 15 คะแนน</span>
+                                    <span class="task-badge">📅 16/12/2024</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="task-card">
+                        <div class="task-header">
+                            <div class="task-emoji">🏃</div>
+                            <div class="task-info">
+                                <div class="task-title-row">
+                                    <div class="task-title">ออกกำลังกาย</div>
+                                    <div class="task-status-badge completed">เสร็จสิ้น</div>
+                                </div>
+                                <div class="task-description">วิ่งหรือออกกำลังกาย 30 นาที</div>
+                                <div class="task-meta">
+                                    <span class="task-badge">⭐ 20 คะแนน</span>
+                                    <span class="task-badge">📅 14/12/2024</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rewards Tab -->
+                <div class="tabs" id="rewards">
+                    <div class="task-card" style="border-color: rgba(236,72,153,0.5); background: linear-gradient(135deg, rgba(236,72,153,0.1), rgba(139,92,246,0.05));">
+                        <div class="task-header">
+                            <div class="task-emoji" style="background: rgba(236,72,153,0.2);">🧸</div>
+                            <div class="task-info">
+                                <div class="task-title-row">
+                                    <div class="task-title">ของเล่นใหม่</div>
+                                    <div class="task-status-badge" style="background: #4CAF50;">✅ แลกได้</div>
+                                </div>
+                                <div class="task-description">เลือกของเล่นที่ชอบได้ 1 ชิ้น</div>
+                                <div class="task-meta">
+                                    <span class="task-badge">⭐ 50 คะแนน</span>
+                                    <span class="task-badge">📊 150/50</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="task-card" style="border-color: rgba(236,72,153,0.5); background: linear-gradient(135deg, rgba(236,72,153,0.1), rgba(139,92,246,0.05));">
+                        <div class="task-header">
+                            <div class="task-emoji" style="background: rgba(236,72,153,0.2);">🎪</div>
+                            <div class="task-info">
+                                <div class="task-title-row">
+                                    <div class="task-title">ไปเที่ยวสวนสนุก</div>
+                                    <div class="task-status-badge" style="background: #4CAF50;">✅ แลกได้</div>
+                                </div>
+                                <div class="task-description">ไปเที่ยวสวนสนุกกับครอบครัว</div>
+                                <div class="task-meta">
+                                    <span class="task-badge">⭐ 100 คะแนน</span>
+                                    <span class="task-badge">📊 150/100</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="task-card" style="border-color: rgba(158,158,158,0.3); background: rgba(158,158,158,0.05);">
+                        <div class="task-header">
+                            <div class="task-emoji" style="background: rgba(158,158,158,0.2);">👑</div>
+                            <div class="task-info">
+                                <div class="task-title-row">
+                                    <div class="task-title">เล่นเกมเพิ่ม 1 ชั่วโมง</div>
+                                    <div class="task-status-badge" style="background: #9E9E9E;">❌ คะแนนไม่พอ</div>
+                                </div>
+                                <div class="task-description">เล่นเกมได้เพิ่ม 1 ชั่วโมง</div>
+                                <div class="task-meta">
+                                    <span class="task-badge">⭐ 200 คะแนน</span>
+                                    <span class="task-badge">📊 150/200</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Navigation -->
+            <div class="bottom-nav">
+                <div class="nav-item active" onclick="showTab('dashboard')">
+                    <div class="nav-icon">🏠</div>
+                    <div>หน้าหลัก</div>
+                </div>
+                <div class="nav-item" onclick="showTab('tasks')">
+                    <div class="nav-icon">📋</div>
+                    <div>ภารกิจ</div>
+                </div>
+                <div class="nav-item" onclick="showTab('rewards')">
+                    <div class="nav-icon">🎁</div>
+                    <div>รางวัล</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tabs').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active from all nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active to clicked nav item
+            event.currentTarget.classList.add('active');
+        }
+    </script>
+</body>
+</html>
+
